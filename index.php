@@ -42,7 +42,66 @@
     </form>
 
 </div>
+<hr style="margin: 60px 0; border: 1px solid #ddd;">
 
+<h2 style="text-align: center; color: #333;">Калькулятор</h2>
+
+<form action="index.php" method="post" style="max-width: 500px; margin: 0 auto; padding: 20px; background: #fff; border-radius: 10px; box-shadow: 0 2px 12px rgba(0,0,0,0.1);">
+    <div style="display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; flex-wrap: wrap;">
+        <input type="number" name="num1" step="any" placeholder="Первое число" required style="flex: 1; min-width: 140px; padding: 12px; font-size: 1.1em;">
+        
+        <select name="operation" style="padding: 12px; font-size: 1.1em; min-width: 60px; text-align: center;">
+            <option value="+">+</option>
+            <option value="-">-</option>
+            <option value="*">×</option>
+            <option value="/">÷</option>
+        </select>
+        
+        <input type="number" name="num2" step="any" placeholder="Второе число" required style="flex: 1; min-width: 140px; padding: 12px; font-size: 1.1em;">
+    </div>
+
+    <button type="submit" name="calculate" value="1" style="width: 100%; padding: 14px; font-size: 1.2em; background: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer;">
+        Вычислить
+    </button>
+</form>
+
+<?php
+if (isset($_POST['calculate'])) {
+    $num1 = (float) ($_POST['num1'] ?? 0);
+    $num2 = (float) ($_POST['num2'] ?? 0);
+    $op   = $_POST['operation'] ?? '+';
+
+    $result = null;
+    $message = '';
+
+    switch ($op) {
+        case '+':
+            $result = $num1 + $num2;
+            break;
+        case '-':
+            $result = $num1 - $num2;
+            break;
+        case '*':
+            $result = $num1 * $num2;
+            break;
+        case '/':
+            if ($num2 == 0) {
+                $message = "Ошибка: деление на ноль невозможно!";
+            } else {
+                $result = $num1 / $num2;
+            }
+            break;
+    }
+
+    echo '<div style="margin-top: 30px; text-align: center; font-size: 1.4em;">';
+    if ($message) {
+        echo '<span style="color: #dc3545; font-weight: bold;">' . $message . '</span>';
+    } elseif ($result !== null) {
+        echo 'Результат: <strong>' . number_format($result, 4, '.', ' ') . '</strong>';
+    }
+    echo '</div>';
+}
+?>
 </body>
 </html>
 
